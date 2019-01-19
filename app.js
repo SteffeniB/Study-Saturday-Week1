@@ -5,6 +5,7 @@ const morgan = require('morgan');
 
 // Routes
 const Student = require('./routes/student');
+const Test = require('./routes/test');
 
 // Init App
 const app = express();
@@ -14,6 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use('/student', Student);
+app.use('/test', Test);
 
 // Err-handling
 app.use(function(err, req, res, next) {
