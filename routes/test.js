@@ -1,17 +1,42 @@
 // Express routes
 const router = require('express').Router();
-
-let tests = [
-  { id: 0, subject: 'Physics', score: 99, studentId: 0 },
-  { id: 1, subject: 'English', score: 78, studentId: 1 },
-  { id: 2, subject: 'Math', score: 90, studentId: 3 },
-  { id: 3, subject: 'English', score: 55, studentId: 3 },
-  { id: 4, subject: 'Physics', score: 88, studentId: 4 },
-];
+const db = require('../db');
+let tests = db.tests;
+const students = db.students;
 
 // Get Tests
 router.get('/', function(req, res, next) {
   res.json(tests);
+});
+
+router.get('/top', (req, res, next) => {
+  res.send(
+    tests.reduce((acc, cv) => {
+      if (cv.score > acc.score) {
+        acc = cv;
+        return acc;
+      } else {
+        return acc;
+      }
+    })
+  );
+});
+
+router.get('/:id/mean', (req, res, next) => {
+  let studentScores = tests
+    .filter(test => {
+      return test.studentId === Number(req.params.id);
+    })
+    .map(test => {
+      return test.score;
+    });
+  let studentAvg =
+    studentScores.reduce((acc, cv) => {
+      acc += cv;
+      return acc;
+    }, 0) / studentScores.length;
+  console.log(studentAvg);
+  res.send(`The Student's mean score is: ${studentAvg}`);
 });
 
 // Get Test by Id
@@ -35,7 +60,7 @@ router.post('/', function(req, res, next) {
 
 // Delete Score
 router.delete('/:id', function(req, res, next) {
-  let newScores = tests.filter(score => score.id !==  +req.params.id);
+  let newScores = tests.filter(score => score.id !== +req.params.id);
   tests = newScores;
   res.json(tests);
 });
@@ -50,6 +75,14 @@ router.put('/:id', function(req, res, next) {
     }
   });
   res.json(tests);
+});
+
+router.get('/top', (req, res, next) => {
+  console.log(tests);
+  let scores = tests.map(test => {
+    return test;
+  });
+  res.send(scores);
 });
 
 module.exports = router;

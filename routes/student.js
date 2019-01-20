@@ -1,15 +1,9 @@
 // Express routes
 const router = require('express').Router();
+const db = require('../db');
+let students = db.students;
 
 // Create Student Models
-let students = [
-  { id: 0, name: 'Dan' },
-  { id: 1, name: 'Rohan' },
-  { id: 2, name: 'Sol' },
-  { id: 3, name: 'Ella' },
-  { id: 4, name: 'Michael' },
-  { id: 5, name: 'Karen' },
-];
 
 // Get Students
 router.get('/', function(req, res, next) {
